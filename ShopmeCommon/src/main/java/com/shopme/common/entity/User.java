@@ -35,19 +35,14 @@ public class User {
 	private String photos;
 
 	private boolean enabled;
-	
+
 	@ManyToMany
-	@JoinTable(
-			name="user_roles",
-			joinColumns=@JoinColumn(name="user_id"),
-			inverseJoinColumns =@JoinColumn(name="role_id") 
-			)
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
-	
 	public User() {
 	}
-	
+
 	public User(String email, String password, String firstName, String lastname) {
 		super();
 		this.email = email;
@@ -55,8 +50,6 @@ public class User {
 		this.firstName = firstName;
 		this.lastname = lastname;
 	}
-
-
 
 	public Integer getId() {
 		return id;
@@ -120,8 +113,8 @@ public class User {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
-	} 
-	
+	}
+
 	public void addRole(Role role) {
 		this.roles.add(role);
 	}
@@ -131,5 +124,5 @@ public class User {
 		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastname=" + lastname
 				+ ", roles=" + roles + "]";
 	}
-	
+
 }
