@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+
 <meta name="viewport"
 	content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
 
@@ -74,25 +75,64 @@
 			<tbody>
 				<tr th:each="user : ${listUsers}">
 					<td>[[${user.id}]]</td>
-					<td><span class="fa-solid fa-image-portrait fa-3x icon-silver">
-					</span></td>
+					<td>
+					<span th:if="${user.photos == null}" class="fa-solid fa-image-portrait fa-3x icon-silver">
+					</span>
+					<img th:if="${user.photos!= null}" th:src="@{${user.photosImagePath}}" style="width: 100px"/>
+					</td>
 					<td>[[${user.email}]]</td>
 					<td>[[${user.firstName}]]</td>
 					<td>[[${user.lastname}]]</td>
 					<td>[[${user.roles}]]</td>
 					<td><a th:if="${user.enabled==true}"
-						class="fa-solid fa-square-check fa-lg icon-green" href=""></a> <a
-						th:if="${user.enabled==false}"
-						class="fa-solid fa-square-check fa-lg icon-dark" href=""></a></td>
+						class="fa-solid fa-square-check fa-lg icon-green" 
+						th:href="@{'/users/' + ${user.id} + '/enabled/false'}" title = "Disable this user"></a> 
+						
+						<a th:if="${user.enabled==false}" class="fa solid fa-square fa-lg icon-dark"
+						 th:href="@{'/users/' + ${user.id} + '/enabled/true'}" title = "Enable this user"></a>
 
 					<td><a class="fa-solid fa-pen-to-square fa-xl icon-green"
 						th:href="@{'/users/edit/' + ${user.id}}" title="Edit this User"></a>
-						&nbsp; <a class="fa-solid fa-trash fa-lg icon-dark" href=""></a></td>
+						&nbsp; <a class="fa-solid fa-trash fa-lg icon-dark link-delete"
+						th:href="@{'/users/delete/' + ${user.id}}"
+						th:userId="${user.id}"
+						title="Delete this User"></a></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
+	<div class="modal fade text-center" id="confirmModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" >Delete Confirmation</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<span id="confirmText"></span>
+
+				</div>
+				<div class="modal-footer">
+				<a class="btn btn-success" href="" id="yesButton">Yes</a>
+					<button type="button" class="btn btn-danger"
+						data-bs-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="text-center">Shopme Control Panel -Copyright &copy;
 		Shopme</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$(".link-delete").on("click", function(e) {
+				e.preventDefault();
+				link= $(this);
+				$("#yesButton").attr("href", link.attr("href"));
+				userId = link.attr("userId");
+				$("#confirmText").text("Are you sure you want to delete this user ID " + userId + " ?");
+				$("#confirmModal").modal('show');
+			});
+		});
+	</script>
 </body>
 </html>
